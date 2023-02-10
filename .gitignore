@@ -1,0 +1,10 @@
+# go.sum
+go.sum
+
+
+# Binaries for programs and plugins
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
