@@ -20,6 +20,9 @@ jobs:
       - name: GolangCI-Lint Action
         uses: matoous/golangci-lint-action@v1.23.3
 
+        env:
+        # GitHub token for annotations (optional)
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         # Run build of the application
       - name: Run build
         run: go build .
