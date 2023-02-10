@@ -17,10 +17,8 @@ jobs:
         with:
           go-version: "1.19"
 
-      - name: Install dependencies
-        run: |
-          go version
-          go get -u golang.org/x/lint/golint
+      - name: GolangCI-Lint Action
+        uses: matoous/golangci-lint-action@v1.23.3
 
         # Run build of the application
       - name: Run build
