@@ -17,9 +17,6 @@ jobs:
         with:
           go-version: "1.19"
 
-      - name: go-fmt
-        run: make fmt
-
       - name: go-lint
         uses: docker://morphy/revive-action:v2
 
