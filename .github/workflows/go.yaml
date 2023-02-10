@@ -17,12 +17,12 @@ jobs:
         with:
           go-version: "1.19"
 
-      - name: GolangCI-Lint Action
-        uses: matoous/golangci-lint-action@v1.23.3
+      - name: go-fmt
+        run: make fmt
 
-        env:
-        # GitHub token for annotations (optional)
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: go-lint
+        uses: docker://morphy/revive-action:v2
+
         # Run build of the application
       - name: Run build
         run: go build .
