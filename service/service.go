@@ -3,6 +3,7 @@ package service
 import (
 	"context"
 	"fmt"
+	"log"
 	"net/http"
 	"net/url"
 	"time"
@@ -16,6 +17,7 @@ import (
 	"go.mongodb.org/mongo-driver/mongo"
 )
 
+// shorten the url
 func ShortenUrl(c *gin.Context) {
 
 	// select {
@@ -98,5 +100,35 @@ func ShortenUrl(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{
 		"newURL":  newUrl,
 		"expires": expires.Format("2006-01-02 15:04:05"),
+		"urlcode": urlCode,
 	})
+}
+
+// redirect to that url
+func Redirect(c *gin.Context) {
+	code := c.Param("code")
+	fmt.Println("urlcode: ", code)
+
+	var result bson.M
+
+	queryErr := db.Collection.FindOne(context.Background(), bson.D{{Key: "urlcode", Value: code}}).Decode(&result)
+
+	delete(result, "_id")
+	fmt.Println("result: ", result)
+
+	if queryErr != nil {
+		if queryErr == mongo.ErrNoDocuments {
+			c.JSON(http.StatusBadRequest, gin.H{"error": fmt.Sprintf("No URL with code: %s", code)})
+			return
+		} else {
+			c.JSON(http.StatusInternalServerError, gin.H{"error": queryErr.Error()})
+			return
+		}
+	}
+
+	log.Print(result["originalurl"])
+
+	var longUrl = fmt.Sprint(result["originalurl"])
+
+	c.Redirect(http.StatusPermanentRedirect, longUrl)
 }

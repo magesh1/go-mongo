@@ -9,5 +9,6 @@ func Routes(routes *gin.Engine) {
 	url := routes.Group("/url")
 	{
 		url.POST("/short", service.ShortenUrl)
+		url.GET("/redirect/:code", service.Redirect)
 	}
 }
